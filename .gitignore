@@ -1,0 +1,64 @@
+# Virtual Environment
+.venv/
+venv/
+env/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environment variables
+.env
+.env.*
+
+# IDE
+.vscode/
+.idea/
+
+# macOS
+.DS_Store
+
+# Testing / coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Type checking / linting
+.mypy_cache/
+.ruff_cache/
+
+# Logs
+*.log
+
+# Alembic
+alembic/versions/*.pyc
+
+# Redis
+*.rdb
+
+# Celery
+celerybeat-schedule
+celerybeat.pid
+
+# Build files
+dist/
+build/
+*.egg-info/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Temporary files
+tmp/
+temp/
+
+# Docker
+*.pid
+
+.env
+.env.*
+!.env.example
+
+/.qodo
+/.vscode
