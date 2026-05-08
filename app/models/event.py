@@ -28,7 +28,7 @@ class Event(Base, TimestampMixin):
     # SQLAlchemy's version_id_col watches this row — if two requests
     # try to update the same row simultaneously, one will get a
     # StaleDataError. That's optimistic locking. We'll handle it in the service.
-    available_seats: Mapped[int] = mapped_column(Numeric(10, 2), nullable=False)
+    available_seats: Mapped[int] = mapped_column(Integer, nullable=False)
 
     ticket_price: Mapped[float] = mapped_column(Numeric(10, 2), nullable=False)
 
