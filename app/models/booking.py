@@ -26,7 +26,7 @@ class Booking(Base, TimestampMixin):
     # Like a request deduplication ID — similar to how you'd handle
     # duplicate Dio retries on the Flutter side.
     idempotency_key: Mapped[str] = mapped_column(
-        String(255), nullable=False, unique=True, index=True
+        String(255), nullable=True, unique=True, index=True
     )
 
     notes: Mapped[str] = mapped_column(Text, nullable=True)

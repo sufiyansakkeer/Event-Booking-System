@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy import DateTime, Integer, String, Text
+from sqlalchemy import DateTime, Integer, Numeric, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from typing import TYPE_CHECKING
 from app.models.base import Base, TimestampMixin
@@ -22,6 +22,15 @@ class Event(Base, TimestampMixin):
 
     # Total seats available at creation time. Never changes after creation.
     total_seats: Mapped[int] = mapped_column(Integer, nullable=False)
+
+    # This is the key field for concurrency control.
+    # Every time a booking is made, available_seats decreases.
+    # SQLAlchemy's version_id_col watches this row — if two requests
+    # try to update the same row simultaneously, one will get a
+    # StaleDataError. That's optimistic locking. We'll handle it in the service.
+    available_seats: Mapped[int] = mapped_column(Numeric(10, 2), nullable=False)
+
+    ticket_price: Mapped[float] = mapped_column(Numeric(10, 2), nullable=False)
 
     # version_id is the optimistic lock counter.
     # SQLAlchemy increments this automatically on every UPDATE.

@@ -1,8 +1,8 @@
 """create users events bookings tables
 
-Revision ID: 38bd8121049a
+Revision ID: 95cedf7d2350
 Revises: 
-Create Date: 2026-05-08 06:19:54.389327
+Create Date: 2026-05-08 07:18:56.494760
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = '38bd8121049a'
+revision: str = '95cedf7d2350'
 down_revision: Union[str, Sequence[str], None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -28,6 +28,8 @@ def upgrade() -> None:
     sa.Column('venue', sa.String(length=255), nullable=False),
     sa.Column('starts_at', sa.DateTime(timezone=True), nullable=False),
     sa.Column('total_seats', sa.Integer(), nullable=False),
+    sa.Column('available_seats', sa.Numeric(precision=10, scale=2), nullable=False),
+    sa.Column('ticket_price', sa.Numeric(precision=10, scale=2), nullable=False),
     sa.Column('version_id', sa.Integer(), nullable=False),
     sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=False),
     sa.Column('updated_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=False),
@@ -49,7 +51,7 @@ def upgrade() -> None:
     sa.Column('user_id', sa.Integer(), nullable=False),
     sa.Column('event_id', sa.Integer(), nullable=False),
     sa.Column('status', sa.String(length=50), nullable=False),
-    sa.Column('idempotency_key', sa.String(length=255), nullable=False),
+    sa.Column('idempotency_key', sa.String(length=255), nullable=True),
     sa.Column('notes', sa.Text(), nullable=True),
     sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=False),
     sa.Column('updated_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=False),
