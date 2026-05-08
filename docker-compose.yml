@@ -2,25 +2,27 @@ services:
   db:
     image: postgres:16
     environment:
-      POSTGRES_USER:postgres
-      POSTGRES_PASSWORD:postgres
-      POSTGRES_DB:event_booking
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: event_booking
     ports:
-      -"5432:5432"
+      - "5432:5432"
     volumes:
-      -postgres_data:/var/lib/postgresql/data
-    
+      - postgres_data:/var/lib/postgresql/data
+
   redis:
     image: redis:7-alpine
     ports:
       - "6379:6379"
-    
+
   celery_worker:
     build: .
     command: celery -A app.core.celery_app worker --loglevel=info
     environment:
-      - DATABASE_URL: postgresql+asyncpg://postgres:postgres@db:5432/event_booking
-      - REDIS_URL: redis://redis:6379/0
+      DATABASE_URL: postgresql+asyncpg://postgres:postgres@db:5432/event_booking
+      REDIS_URL: redis://redis:6379/0
+      SECRET_KEY: 51e0b7bac2be0de9e86b90f3a41525b7e12803c91b244c8669bc000ad815b4e0
+      ALGORITHM: HS256
     depends_on:
       - db
       - redis
@@ -38,9 +40,13 @@ services:
     command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
     ports:
       - "8000:8000"
+    volumes:
+      - .:/app
     environment:
       DATABASE_URL: postgresql+asyncpg://postgres:postgres@db:5432/event_booking
       REDIS_URL: redis://redis:6379/0
+      SECRET_KEY: 51e0b7bac2be0de9e86b90f3a41525b7e12803c91b244c8669bc000ad815b4e0
+      ALGORITHM: HS256
     depends_on:
       - db
       - redis
