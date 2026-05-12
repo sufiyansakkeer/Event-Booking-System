@@ -44,5 +44,6 @@ dev = [
     "mypy (>=2.0.0,<3.0.0)",
     "testcontainers[postgres] (>=4.14.2,<5.0.0)",
     "locust (>=2.43.4,<3.0.0)",
-    "celery-types (>=0.26.0,<0.27.0)"
+    "celery-types (>=0.26.0,<0.27.0)",
+    "types-redis (>=4.6.0.20241004,<5.0.0.0)"
 ]

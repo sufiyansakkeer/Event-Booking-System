@@ -1,5 +1,7 @@
 import time
-import celery
+from typing import Any
+
+from celery import Task
 from app.core.celery_app import celery_app
 
 
@@ -11,7 +13,7 @@ from app.core.celery_app import celery_app
 # default_retry_delay=60 means wait 60 seconds between retries.
 @celery_app.task(bind=True, max_retries=3, default_retry_delay=60)
 def send_booking_confirmation_email(
-    self: celery.Task[..., None], user_email: str, event_name: str, booking_id: int
+    self: "Task[..., Any]", user_email: str, event_name: str, booking_id: int
 ) -> None:
     """
     Simulates sending a booking confirmation email.
@@ -32,4 +34,4 @@ def send_booking_confirmation_email(
         # If anything goes wrong, tell Celery to retry this task.
         # exc=exc passes the original exception so Celery logs it properly.
         # raise self.retry() stops current execution and reschedules the task.
-        raise self.retry(exc=exc)
+        raise self.retry(exc=exc) from exc

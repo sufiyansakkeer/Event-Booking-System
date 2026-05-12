@@ -50,5 +50,5 @@ class Event(Base, TimestampMixin):
     # and HOW to increment it (version_id_generator=True means auto-increment).
     __mapper_args__ = {  # __mapper_args__ is the ORM mapper configuration
         "version_id_col": version_id,  # "version_id_col" is build-in sql alchemy
-        "version_id_generator": True,  # this one is also build-in
+        # "version_id_generator": True,  # this one is also build-in
     }
