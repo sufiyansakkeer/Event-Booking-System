@@ -111,7 +111,11 @@ class BookingService:
                     str(booking.id),
                     ex=86400,
                 )
-
+        except ValueError as e:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=str(e),
+            ) from e
         except StaleDataError as e:
             # Another request won the race — undo everything.
             await self.db.rollback()
@@ -169,6 +173,11 @@ class BookingService:
         try:
             machine = BookingStateMachine(current_state=booking.status)
             new_state = machine.apply(payload.action)
+        except ValueError as e:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=str(e),
+            ) from e
         except MachineError as e:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
