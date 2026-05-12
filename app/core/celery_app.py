@@ -7,7 +7,7 @@ settings = get_settings()
 # for naming tasks internally. Think of this like your app's bundle ID.
 celery_app = Celery(
     "event_booking",
-    # The broker is where tasks are SENT TO.
+    # The broker is where tasks are SENT TO. (while published)
     # Celery publishes a message here when you call .delay() or .apply_async().
     # Redis acts like a queue — producer (FastAPI) writes, consumer (worker) reads.
     # In Dart terms: broker = StreamController, task = event added to the stream.
