@@ -2,8 +2,6 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.booking import Booking
-from app.models.event import Event
-from app.models.user import User
 
 
 class BookingRepository:
@@ -25,7 +23,9 @@ class BookingRepository:
     ) -> list[Booking]:
         result = await self.db.execute(
             select(Booking).where(
-                User.id == user_id, Event.id == event_id, Booking.status != "cancelled"
+                Booking.id == user_id,
+                Booking.id == event_id,
+                Booking.status != "cancelled",
             )
         )
         return list(result.scalars().all())
