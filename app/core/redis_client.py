@@ -7,5 +7,5 @@ settings = get_settings()
 redis_client: aioredis.Redis = aioredis.from_url(  # type: ignore
     settings.REDIS_URL,
     encoding="utf-8",
-    decode_responses=True,  # returns str instead of bytes
+    decode_responses=False,  # returns str instead of bytes if it is True
 )

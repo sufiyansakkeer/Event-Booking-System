@@ -1,6 +1,7 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import HTTPException, status
 from app.models.event import Event
+from app.models.user import User
 from app.repositories.event import EventRepository
 from app.schemas.event import EventCreateRequest, EventResponse
 
@@ -10,7 +11,9 @@ class EventService:
         self.db = db
         self.event_repo = EventRepository(db=db)
 
-    async def create_event(self, payload: EventCreateRequest) -> EventResponse:
+    async def create_event(
+        self, payload: EventCreateRequest, current_user: User
+    ) -> EventResponse:
         event = Event(
             title=payload.title,
             description=payload.description,
@@ -21,6 +24,7 @@ class EventService:
             # It decreases as bookings are made.
             available_seats=payload.total_seats,
             ticket_price=payload.ticket_price,
+            created_by=current_user.id,
         )
         created_event = await self.event_repo.create(event)
         await self.db.commit()

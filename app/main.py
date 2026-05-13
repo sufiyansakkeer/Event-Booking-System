@@ -1,15 +1,18 @@
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
+from fastapi_cache import FastAPICache
+from fastapi_cache.backends.redis import RedisBackend
 
 from app.api.v1 import auth, booking, event
+from app.core.redis_client import redis_client  # type: ignore
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Startup code can go here (e.g., connect to external services)
     print("Starting up...")
-
+    FastAPICache.init(RedisBackend(redis_client), prefix="event_booking")  # type: ignore
     yield  # This is where the application runs
 
     # Shutdown code can go here (e.g., close connections)

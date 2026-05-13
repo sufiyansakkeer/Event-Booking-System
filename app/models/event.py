@@ -1,12 +1,13 @@
 from datetime import datetime
 
-from sqlalchemy import DateTime, Integer, Numeric, String, Text
+from sqlalchemy import DateTime, ForeignKey, Integer, Numeric, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from typing import TYPE_CHECKING
 from app.models.base import Base, TimestampMixin
 
 if TYPE_CHECKING:
     from app.models.booking import Booking
+    from app.models.user import User
 
 
 class Event(Base, TimestampMixin):
@@ -45,6 +46,10 @@ class Event(Base, TimestampMixin):
     bookings: Mapped[list["Booking"]] = relationship(
         back_populates="event", lazy="noload"
     )
+
+    created_by: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=False)
+
+    author: Mapped["User"] = relationship("User", back_populates="events")
 
     # This tells SQLAlchemy WHICH column to use as the version counter
     # and HOW to increment it (version_id_generator=True means auto-increment).

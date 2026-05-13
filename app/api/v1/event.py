@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, status
+from fastapi_cache.decorator import cache
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.dependencies import get_current_user
 from app.db import get_db
@@ -16,22 +17,25 @@ async def create_event(
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ) -> EventResponse:
-    return await EventService(db=db).create_event(payload=payload)
+    return await EventService(db=db).create_event(
+        payload=payload, current_user=current_user
+    )
 
 
 @router.get(
     "",
     response_model=list[EventResponse],
 )
+@cache(expire=60)
 async def list_events(
     skip: int = 0,
     limit: int = 20,
     db: AsyncSession = Depends(get_db),
-    current_user: User = Depends(get_current_user),
 ) -> list[EventResponse]:
     return await EventService(db=db).get_all_events(skip, limit)
 
 
 @router.get("/{event_id}", response_model=EventResponse)
+@cache(expire=120)
 async def get_event(event_id: int, db: AsyncSession = Depends(get_db)) -> EventResponse:
     return await EventService(db=db).get_event(event_id)

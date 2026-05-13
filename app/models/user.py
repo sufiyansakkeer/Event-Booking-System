@@ -6,6 +6,7 @@ from app.models.base import Base, TimestampMixin
 
 if TYPE_CHECKING:
     from app.models.booking import Booking
+    from app.models.event import Event
 
 
 class User(Base, TimestampMixin):
@@ -26,3 +27,5 @@ class User(Base, TimestampMixin):
     bookings: Mapped[list["Booking"]] = relationship(
         back_populates="user", lazy="noload"
     )
+
+    events: Mapped[list["Event"]] = relationship(back_populates="author", lazy="noload")
